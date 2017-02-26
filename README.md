@@ -30,3 +30,7 @@ sudo apt-get install graphicsmagick
 sudo python instabox.py
 ```
 
+## Future plans
+1. Adding the code to repository
+2. Building Printer support
+3. Adding a wiki/tutorial

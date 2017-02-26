@@ -1,14 +1,16 @@
 # InstaBox
-
+## Description
 InstaBox is a Raspberry Pi Photobooth developed in Python maintained by Tobias Wilhelm
+
+## Screenshots
+
+## Demonstration Video
+Coming soon
 
 ## Hardware Requirement
 1. Raspberry Pi 
 2. RaspiCam
 3. Touchscreen
-
-## Demonstration Video
-Coming soon
 
 ## Instruction
 1. Download the repository with all assets

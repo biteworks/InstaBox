@@ -3,6 +3,7 @@
 InstaBox is a Raspberry Pi Photobooth developed in Python maintained by Tobias Wilhelm
 
 ## Screenshots
+Coming soon
 
 ## Demonstration Video
 Coming soon

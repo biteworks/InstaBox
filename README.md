@@ -8,12 +8,12 @@ Coming soon
 ## Demonstration Video
 Coming soon
 
-## Hardware Requirement
+## Hardware requirement
 1. Raspberry Pi 
 2. RaspiCam
 3. Touchscreen
 
-## Software dependencies
+## Software requirement
 1. Raspian
 2. PyGame (already installed on Raspian)
 3. GraphicsMagick 
@@ -31,6 +31,9 @@ sudo python instabox.py
 ```
 
 ## Future plans
-1. Adding the code to repository
-2. Building Printer support
-3. Adding a wiki/tutorial
+1. Adding the start screen
+2. Adding a loop
+3. Setup composition of the images
+4. Slideshow
+5. Building Printer support
+6. Adding a wiki/tutorial

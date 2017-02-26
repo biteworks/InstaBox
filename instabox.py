@@ -13,7 +13,7 @@ import ConfigParser
 FPS = 25
 WINDOWWIDTH = 800
 WINDOWHEIGHT = 480
-EVENTNAME = 'wilhelm'
+EVENTNAME = 'wedding'
 IMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/'
 
 cam = picamera.PiCamera()

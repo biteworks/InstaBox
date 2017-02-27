@@ -16,7 +16,14 @@ WINDOWHEIGHT = 480
 EVENTNAME = 'wedding'
 IMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/'
 
+# Pygame und Kamera initialisieren
 cam = picamera.PiCamera()
+pygame.init()
+
+# Fenster erstellen
+DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+pygame.display.set_caption('InstaBox')
+pygame.mouse.set_visible(False)
 
 # Kamera-Vorschau starten
 def startCam():
@@ -67,14 +74,6 @@ def captureProcess():
     
 
 def main():
-    # Pygame und Kamera initialisieren
-    pygame.init()
-    
-    # Fenster erstellen
-    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-    pygame.display.set_caption('InstaBox')
-    pygame.mouse.set_visible(False)
-
     while True:
         # Update des Renderfensters 
         pygame.display.update()

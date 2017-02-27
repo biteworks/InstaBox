@@ -1,5 +1,7 @@
-#Anzeige des Bildes nach der Aufnahme funktioniert noch nicht
-#Loop bei Bildaufnahme inklusive Anzeige der Nummer
+#Composition in der Groesse anpassen
+#Eventuell effekte
+#Counter in Textdatei packen
+#Bild fuer die Bearbeitung
 #Startbildschirm
 #Druckoption??
 
@@ -16,7 +18,6 @@ WINDOWHEIGHT = 480
 EVENTNAME = 'hochzeit'
 RAWIMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/Single/'
 COMPIMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/Comp/'
-imageCounter = 0
 
 # Pygame und Kamera initialisieren
 cam = picamera.PiCamera()
@@ -50,20 +51,22 @@ def displayImg(imgName):
     img = pygame.image.load(imgName)
     DISPLAYSURF.blit(img, (0, 0))
 
+def displayProcess(comp):
+    print('Hier soll angezeigt werden, dass die Bilder verarbeitet werden')
+    # 10 Sekunden Delay
+    pygame.time.delay(10000)
+    displayImg(comp)
+
 def compositeImgs(imgNames):
-    compName = EVENTNAME + '_comp_00' + str(imgNames[0])
-    print compName
-    command = "sdnsd"
+    comp = COMPIMAGEFOLDER + time.strftime('%Y-%m-%d_%H-%M-%S') + '_' + EVENTNAME + '_comp.jpg'
+    command = "montage " + imgNames[0] + ' ' + imgNames[1] + ' ' + imgNames[2] + ' ' + imgNames[3] + ' -geometry 2592x1944+2+2 ' + comp + '&'
+    os.system(command)
+    displayProcess(comp)
     
 # Countdown und Aufnahme
 def captureProcess():
     # Liste mit Bildnahmen loeschen
     imgNames = []
-
-    # Anzahl der Aufnahmen
-    global imageCounter
-    imageCounter += 1
-    imgNames.append(imageCounter)
     
     # Kamerabild Anzeigen
     startCam()

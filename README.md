@@ -18,7 +18,7 @@ Coming soon
 2. PyGame (already installed on Raspian)
 3. ImageMagick 
 ```*.sh
-sudo apt-get install graphicsmagick
+sudo apt-get install imagemagick
 ```
 
 ## Instruction

@@ -16,7 +16,7 @@ Coming soon
 ## Software requirement
 1. Raspian
 2. PyGame (already installed on Raspian)
-3. GraphicsMagick 
+3. ImageMagick 
 ```*.sh
 sudo apt-get install graphicsmagick
 ```

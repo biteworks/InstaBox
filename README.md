@@ -1,4 +1,4 @@
-# InstaBox
+# InstaBox (wip)
 ## Description
 InstaBox is a Raspberry Pi Photobooth developed in Python maintained by Tobias Wilhelm
 

@@ -14,7 +14,9 @@ FPS = 25
 WINDOWWIDTH = 800
 WINDOWHEIGHT = 480
 EVENTNAME = 'hochzeit'
-IMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/'
+RAWIMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/Single/'
+COMPIMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/Comp/'
+imageCounter = 0
 
 # Pygame und Kamera initialisieren
 cam = picamera.PiCamera()
@@ -41,19 +43,32 @@ def endCam():
 def captureImg(imgName):
     cam.exposure_mode = 'sports'
     cam.resolution = (2592, 1944)
-    cam.capture(IMAGEFOLDER + imgName + '.jpg');
+    cam.capture(imgName);
     
 # Bild anzeigen
 def displayImg(imgName):
-    img = pygame.image.load(IMAGEFOLDER + imgName + '.jpg')
+    img = pygame.image.load(imgName)
     DISPLAYSURF.blit(img, (0, 0))
 
 def compositeImgs(imgNames):
+    compName = EVENTNAME + '_comp_00' + str(imgNames[0])
+    print compName
     command = "sdnsd"
     
 # Countdown und Aufnahme
 def captureProcess():
+    # Liste mit Bildnahmen loeschen
+    imgNames = []
+
+    # Anzahl der Aufnahmen
+    global imageCounter
+    imageCounter += 1
+    imgNames.append(imageCounter)
+    
+    # Kamerabild Anzeigen
     startCam()
+
+    # Delay von 3 Sekunden
     pygame.time.delay(3000)
 
     # Starte den Aufnahmeprozess (4 Bilder)
@@ -74,11 +89,13 @@ def captureProcess():
         
         # Zeitstempel fuer das Bild setzen
         tempTime = time.strftime('%Y-%m-%d_%H-%M-%S')
-        tempImgName = tempTime + '_' + EVENTNAME
+        tempImgName = RAWIMAGEFOLDER + tempTime + '.jpg'
         
-        # Bild aufnehmen
+        # Bild aufnehmen und Bildnahme an das Array anhaengen
         cam.annotate_text = ""
         captureImg(tempImgName)
+        
+        imgNames.append(tempImgName)
         cam.resolution = (800, 480)
         
         if i == 1:
@@ -89,6 +106,9 @@ def captureProcess():
 
     # Kamera Bild beenden
     endCam()
+    
+    print imgNames
+    compositeImgs(imgNames)
     
     #Fertiges Bild anzeigen
     #displayImg(tempImgName)

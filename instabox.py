@@ -9,15 +9,18 @@ import random, pygame, sys, os
 from pygame.locals import *
 import picamera
 import time
-import ConfigParser
+#import ConfigParser
 
-# Frames und Aufloesung
+# Variablen
 FPS = 25
 WINDOWWIDTH = 800
 WINDOWHEIGHT = 480
 EVENTNAME = 'hochzeit'
 RAWIMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/Single/'
 COMPIMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/Comp/'
+listenToInput = True
+
+# Screens
 
 # Pygame und Kamera initialisieren
 cam = picamera.PiCamera()
@@ -48,8 +51,10 @@ def captureImg(imgName):
     
 # Bild anzeigen
 def displayImg(imgName):
+    global listenToInput
     img = pygame.image.load(imgName)
     DISPLAYSURF.blit(img, (0, 0))
+    listenToInput = True
 
 def displayProcess(comp):
     print('Hier soll angezeigt werden, dass die Bilder verarbeitet werden')
@@ -59,12 +64,15 @@ def displayProcess(comp):
 
 def compositeImgs(imgNames):
     comp = COMPIMAGEFOLDER + time.strftime('%Y-%m-%d_%H-%M-%S') + '_' + EVENTNAME + '_comp.jpg'
-    command = "montage " + imgNames[0] + ' ' + imgNames[1] + ' ' + imgNames[2] + ' ' + imgNames[3] + ' -geometry 2592x1944+2+2 ' + comp + '&'
+    command = "montage " + imgNames[0] + ' ' + imgNames[1] + ' ' + imgNames[2] + ' ' + imgNames[3] + ' -geometry 1296x972+2+2 ' + comp + '&'
     os.system(command)
     displayProcess(comp)
     
 # Countdown und Aufnahme
 def captureProcess():
+    global listenToInput
+    listenToInput = False
+    
     # Liste mit Bildnahmen loeschen
     imgNames = []
     
@@ -126,13 +134,14 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
+            if listenToInput:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        captureProcess()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    (mouseX, mouseY) = pygame.mouse.get_pos()
+                    print mouseX, mouseY
                     captureProcess()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                (mouseX, mouseY) = pygame.mouse.get_pos()
-                print mouseX, mouseY
-                captureProcess()
 
 if __name__ == '__main__':
     main()

@@ -1,6 +1,6 @@
 import time, threading
 
-counter = 5
+counter = 10
 countDownRuns = False
 
 def countDown():
@@ -14,7 +14,6 @@ def countDown():
         startTimer(counter)
         return
 
-    counter = 3
     countDownRuns = False
 
 def startTimer(countDownTime):

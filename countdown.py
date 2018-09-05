@@ -16,13 +16,10 @@ def countDown():
 
     countDownRuns = False
 
-def startTimer(countDownTime):
+def startTimer():
     global countDownRuns
 
     countDownRuns = True
-
-    if not countDownRuns:
-        counter = countDownTime
 
     t = threading.Timer(1.0, countDown)
     t.start()  # after 30 seconds, "hello, world" will be printed
@@ -31,4 +28,6 @@ def setTimer(seconds):
     global counter
     counter = seconds
 
-startTimer(counter)
+	
+setTimer(5)
+startTimer()

@@ -1,0 +1,1 @@
+Cameraauflösung zum Anzeigen muss 640x480 sein und in X richtung um 80px verschoben werden, wenn Bild mittig sein soll

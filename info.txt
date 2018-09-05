@@ -1,1 +1,5 @@
 Cameraauflösung zum Anzeigen muss 640x480 sein und in X richtung um 80px verschoben werden, wenn Bild mittig sein soll
+
+preview = camera.start_preview()
+preview.fullscreen = False
+preview.window = (80, 0, 640, 480)

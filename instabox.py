@@ -1,91 +1,126 @@
-#Anzeige des Bildes nach der Aufnahme funktioniert noch nicht
-#Loop bei Bildaufnahme inklusive Anzeige der Nummer
-#Startbildschirm
-#Druckoption??
-
-import random, pygame, sys, os
+import pygame, sys, os, time, threading
+from picamera import PiCamera
+from time import sleep
 from pygame.locals import *
-import picamera
-import time
-import ConfigParser
 
-# Frames und Aufloesung
-FPS = 25
-WINDOWWIDTH = 800
-WINDOWHEIGHT = 480
-EVENTNAME = 'wedding'
-IMAGEFOLDER = '/home/pi/Desktop/InstaBox-Images/'
+# Global Variables
+listenToInput = True
+state = 1
+counter = 3
+countDownRuns = False
+runFunc = "shoot"
 
-cam = picamera.PiCamera()
+# Image Settings
+imageResolution = [2592,1944]
+imageFolder = '/home/pi/Desktop/Instabox/Images/'
 
-# Kamera-Vorschau starten
-def startCam():
-    cam.start_preview(fullscreen=False,window=(0,0,800,480))
-    cam.vflip = True
-    cam.hflip = True
+# Event-Settings
+eventName = 'Tobias-30er_'
 
-# Kamera-Vorschau beenden
-def endCam():
-    cam.stop_preview()
+# Assets Loading
+imgStart = pygame.image.load('assets/Start.jpg')
+imgHowTo = pygame.image.load('assets/Erklaerung.jpg')
+imgBG = pygame.image.load('assets/Background.jpg')
+imgEdit = pygame.image.load('assets/Bearbeiten.jpg')
 
-# Bild aufnehmen in maximaler Aufloesung
-def captureImg(imgName):
-    cam.exposure_mode = 'sports'
-    cam.resolution = (2592, 1944)
-    cam.capture(IMAGEFOLDER + imgName + '.jpg');
-    
-# Bild anzeigen
-def displayImg(imgName):
-    img = pygame.image.load(IMAGEFOLDER + imgName + '.jpg')
-    pygame.display.blit(img, (0, 0))
-    
-# Countdown und Aufnahme
+pygame.init()
+screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+pygame.mouse.set_visible(False)
+camera = PiCamera()
+camera.led = False
+
+# Set Functions
+def setImage(imgName):
+    if(imgName == 'Start'):
+        screen.blit(imgStart,(0,0))
+    elif(imgName == 'HowTo'):
+        screen.blit(imgHowTo,(0,0))
+    elif(imgName == 'Background'):
+        screen.blit(imgBG,(0,0))
+    elif(imgName == 'Edit'):
+        screen.blit(imgEdit,(0,0))
+        
+def setState(newState):
+    global state
+    state = newState
+
+def setInputState(listenTo):
+    global listenToInput
+    listenToInput = listenTo
+
+# Set timer value
+def setTimer(seconds):
+    global counter
+    counter = seconds
+
+# Choose a Function to run after countdown
+def setRunFunc(FuncToRun):
+    global runFunc
+    runFunc = FuncToRun
+
+# Countdown Function
+def countDown():
+    global countDownRuns
+    global counter
+
+    print(counter)
+    counter = counter - 1
+
+    if(counter>=1):
+        startTimer(runFunc)
+        return
+		
+    if(runFunc=="shoot"):	
+        print("shoot")
+
+    elif(runFunc=="run"):
+	print("run")
+		
+    countDownRuns = False
+
+def startTimer(runFunc):
+    global countDownRuns
+
+    countDownRuns = True
+
+    t = threading.Timer(1.0, countDown)
+    t.start()
+
+# Capture Function
 def captureProcess():
-    startCam()
-    time.sleep(3)
-    endCam()
+    setState(2)
+    camera.resolution = (imageResolution[0], imageResolution[1])
+    camera.start_preview(fullscreen=True)
+    sleep(5)
+    camera.awb_mode = 'auto'
+    camera.exposure_mode = 'sports'
 
-    # Starte den Aufnahmeprozess
-    #(soll noch in Loop um das Ganze drei mal zu machen)
-    print("3")
-    pygame.time.delay(1000)
-    print("2")
-    pygame.time.delay(1000)
-    print("1")
-    pygame.time.delay(1000)  
-    print("Bitte lachen!")
     tempTime = time.strftime('%Y-%m-%d_%H-%M-%S')
-    tempImgName = tempTime + '_' + EVENTNAME
-    print (tempImgName)
+    tempImageName = imageFolder + tempTime + '.jpg'
 
-    # Bild aufnehmen
-    captureImg(tempImgName)
-    pygame.time.delay(1000)
+    #camera.capture(tempImageName, use_video_port = True)
+    camera.stop_preview()
 
-    #Bild anzeigen
-    #displayImg(tempImgName)
-    
 
 def main():
-    # Pygame und Kamera initialisieren
-    pygame.init()
-    
-    # Fenster erstellen
-    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-    pygame.display.set_caption('InstaBox')
-    pygame.mouse.set_visible(False)
-
-    while True:
-        # Update des Renderfensters 
-        pygame.display.update()
+    setImage('Start')
         
+    while True:
+        # Update Window
+        pygame.display.update()
+                         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+                
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    captureProcess()
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    
+            if listenToInput:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                     captureProcess()
 
 if __name__ == '__main__':
     main()

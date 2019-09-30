@@ -15,6 +15,10 @@ Coming soon
 
 ## Software requirement
 1. Raspian
+```*.sh
+sudo apt-get update
+sudo apt-get upgrade
+```
 2. PyGame (already installed on Raspian)
 3. ImageMagick 
 ```*.sh
@@ -27,7 +31,7 @@ sudo apt-get install imagemagick
 3. Open the terminal and navigate to the directory
 4. Run application by typing the following command into the terminal
 ```*.sh
-sudo python instabox.py
+python instabox.py
 ```
 
 ## Future plans
